@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_take_out"
+        icon="@drawable/ic_take_out"
+        title="外卖" />
+    <tab
+        id="@+id/tab_discover"
+        icon="@drawable/ic_discover"
+        title="发现" />
+    <tab
+        id="@+id/tab_order"
+        icon="@drawable/ic_order"
+        title="订单" />
+</tabs>

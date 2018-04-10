@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#F83F3C</color>
+    <color name="colorPrimaryDark">#F83F3C</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="whiteText">#ffffff</color>
+    <color name="tab_canteen">#FF594C</color>
+    <color name="tab_supermarket">#FD902A</color>
+    <color name="tab_others">#80CEF4</color>
+</resources>

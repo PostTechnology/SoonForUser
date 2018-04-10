@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<litepal>
+    <dbname value="Soon"></dbname>
+
+    <version value="4"></version>
+
+    <list>
+        <mapping class="com.soon.android.db.StoreShoppingCar"></mapping>
+        <mapping class="com.soon.android.db.AddressList"></mapping>
+    </list>
+</litepal>

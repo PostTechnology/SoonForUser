@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.soon.android.StoreActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:fitsSystemWindows="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_collapseMode="parallax"
+                android:fitsSystemWindows="true">
+
+                <ImageView
+                    android:id="@+id/background_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax"
+                    android:fitsSystemWindows="true"
+                    android:src="@drawable/user_picture"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:orientation="horizontal">
+
+                    <!--<android.support.v7.widget.CardView-->
+                        <!--android:layout_width="100dp"-->
+                        <!--android:layout_height="70dp"-->
+                        <!--android:layout_marginRight="10dp"-->
+                        <!--app:cardCornerRadius="5dp">-->
+
+                        <!--<ImageView-->
+                            <!--android:id="@+id/canteen_img"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:scaleType="centerCrop"-->
+                            <!--android:src="@drawable/user_picture"/>-->
+                    <!--</android.support.v7.widget.CardView>-->
+
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="vertical">-->
+
+                        <!--<LinearLayout-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentTop="true">-->
+
+                            <!--<TextView-->
+                                <!--android:id="@+id/sales_volume"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_toRightOf="@id/rating_num"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:textStyle="bold"-->
+                                <!--android:textSize="15sp"-->
+                                <!--android:text="月售100单"/>-->
+                        <!--</LinearLayout>-->
+
+                        <!--<RelativeLayout-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_centerVertical="true">-->
+
+                            <!--<TextView-->
+                                <!--android:id="@+id/rating_num"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_toRightOf="@id/rating_bar"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:layout_marginLeft="5dp"-->
+                                <!--android:textStyle="bold"-->
+                                <!--android:textSize="15sp"-->
+                                <!--android:text="4.4"/>-->
+
+                            <!--<TextView-->
+                                <!--android:id="@+id/dispatch_time"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_toRightOf="@id/rating_num"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:layout_marginLeft="10dp"-->
+                                <!--android:textStyle="bold"-->
+                                <!--android:textSize="15sp"-->
+                                <!--android:text="50分钟"/>-->
+                        <!--</RelativeLayout>-->
+
+                        <!--<RelativeLayout-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentBottom="true">-->
+
+                            <!--<TextView-->
+                                <!--android:id="@+id/send_out_price"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:textStyle="bold"-->
+                                <!--android:textSize="15sp"-->
+                                <!--android:text="起送￥100"/>-->
+                            <!--<TextView-->
+                                <!--android:id="@+id/transportation_expense"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_toRightOf="@id/send_out_price"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:layout_marginLeft="10dp"-->
+                                <!--android:textStyle="bold"-->
+                                <!--android:textSize="15sp"-->
+                                <!--android:text="免配送费"/>-->
+                        <!--</RelativeLayout>-->
+                    <!--</RelativeLayout>-->
+                </LinearLayout>
+            </RelativeLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"></android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:orientation="vertical">
+
+            <com.gigamole.navigationtabstrip.NavigationTabStrip
+                android:id="@+id/navigation_tab_strip"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_gravity="center"
+                app:nts_active_color="#42a4d1"
+                app:nts_color="#42a4d1"
+                app:nts_corners_radius="1dp"
+                app:nts_inactive_color="#ff1a1e23"
+                app:nts_size="15sp"
+                app:nts_weight="3dp" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"></android.support.v4.view.ViewPager>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:id="@+id/bottomRelativeLayout"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:background="#EAEAEA"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/shopping_car"
+            android:layout_centerVertical="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_shopping_car"/>
+        <LinearLayout
+            android:layout_toRightOf="@id/shopping_car"
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/sum_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textColor="#F7100E"
+                android:textSize="18sp"
+                android:text="￥0"/>
+            <TextView
+                android:id="@+id/offer_price"
+                android:text="10元起送"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/close_account"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:height="40dp"
+            android:width="100dp"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#cdcdcd"
+            android:textSize="17sp"
+            android:textColor="@color/whiteText"
+            android:text="去结算"/>
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
