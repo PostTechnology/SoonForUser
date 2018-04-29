@@ -77,11 +77,6 @@ public class StoreActivity extends AppCompatActivity {
 
         Store store = (Store)getIntent().getSerializableExtra("canteen_data");
         actionBar.setTitle(store.getName());
-//        salesVolume.setText("月售" + canteenListItemModel.getDispatchTime() + "单");
-//        sendOutPrice.setText("起送￥" + canteenListItemModel.getSendOutPrice());
-//        transportationExpense.setText("配送￥" + String.valueOf(canteenListItemModel.getTransportationExpense()));
-//        ratingNum.setText(String.valueOf("评分" +canteenListItemModel.getRatingNum()));
-//        dispatchTime.setText("送达" + canteenListItemModel.getDispatchTime() + "分钟");
         Glide.with(MyApplication.getContext()).load(store.getImage().getFileUrl()).into(backgroundImg);
 
         StoreActivityFragmentPagerAdaper storeActivityFragmentPagerAdaper = new StoreActivityFragmentPagerAdaper(getSupportFragmentManager());
@@ -100,6 +95,8 @@ public class StoreActivity extends AppCompatActivity {
                 }
             }
         });
+
+        DataSupport.deleteAll(StoreShoppingCar.class);//初始化，删除购物车里所有的数据
     }
 
     public static void actionStart(Context context, Store store){

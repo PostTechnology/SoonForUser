@@ -53,9 +53,51 @@
             android:text="123"/>
 
         <Button
+            android:id="@+id/buy_again"
             android:layout_alignParentRight="true"
             android:layout_width="70dp"
             android:text="再来一单"
+            android:layout_centerVertical="true"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/whiteText"
+            android:layout_height="30dp" />
+
+        <Button
+            android:id="@+id/evaluate"
+            android:layout_toLeftOf="@id/buy_again"
+            android:layout_marginRight="15dp"
+            android:layout_width="70dp"
+            android:text="立即评价"
+            android:layout_centerVertical="true"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/whiteText"
+            android:layout_height="30dp" />
+
+        <Button
+            android:id="@+id/cancel_order"
+            android:layout_toLeftOf="@id/buy_again"
+            android:layout_marginRight="15dp"
+            android:layout_width="70dp"
+            android:text="取消订单"
+            android:layout_centerVertical="true"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/whiteText"
+            android:layout_height="30dp" />
+
+        <Button
+            android:id="@+id/confirm_receipt"
+            android:layout_alignParentRight="true"
+            android:layout_width="70dp"
+            android:text="确认收货"
+            android:layout_centerVertical="true"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/whiteText"
+            android:layout_height="30dp" />
+        <Button
+            android:id="@+id/pay"
+            android:layout_alignParentRight="true"
+            android:layout_width="70dp"
+            android:text="立即支付"
             android:layout_centerVertical="true"
             android:background="@color/colorPrimary"
             android:textColor="@color/whiteText"

@@ -49,7 +49,8 @@
         <activity android:name=".AddAddressActivity" />
         <activity android:name=".PayActivity" />
         <activity android:name=".UpdateAddressActivity" />
-        <activity android:name=".PoiSelectActivity"></activity>
+        <activity android:name=".PoiSelectActivity" />
+        <activity android:name=".EvaluateActivity"></activity>
     </application>
 
 </manifest>

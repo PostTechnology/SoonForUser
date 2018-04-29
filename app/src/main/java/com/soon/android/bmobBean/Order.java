@@ -1,5 +1,7 @@
 package com.soon.android.bmobBean;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
 
@@ -7,7 +9,7 @@ import cn.bmob.v3.datatype.BmobDate;
  * Created by LYH on 2018/3/5.
  */
 
-public class Order extends BmobObject{
+public class Order extends BmobObject implements Serializable {
 
     private String userObjectId;
 
