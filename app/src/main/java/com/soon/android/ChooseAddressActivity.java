@@ -19,7 +19,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.soon.android.adapterDataModels.AddressListChangeModel;
 import com.soon.android.adapterDataModels.CitySortModel;
 import com.soon.android.adapters.AddressListChangeAdapter;
@@ -214,7 +216,6 @@ public class ChooseAddressActivity extends AppCompatActivity implements CitySort
         String city = intent.getStringExtra("city");
         locationNow.setText(positionLocation);
         yourCity.setText(city);
-        findViewById(R.id.getgoods_location_box).setVisibility(View.GONE);
         yourCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

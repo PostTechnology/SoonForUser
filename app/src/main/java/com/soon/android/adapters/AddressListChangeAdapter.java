@@ -1,10 +1,14 @@
 package com.soon.android.adapters;
 
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.soon.android.AddressListActivity;
+import com.soon.android.MyApplication;
 import com.soon.android.R;
+import com.soon.android.UpdateAddressActivity;
 import com.soon.android.adapterDataModels.AddressListChangeModel;
 
 import java.util.List;
@@ -24,5 +28,10 @@ public class AddressListChangeAdapter extends BaseQuickAdapter<AddressListChange
         helper.setText(R.id.brief_address, item.getBrief_address())
                 .setText(R.id.detailed_address, item.getDetailed_address())
                 .setText(R.id.brief_user_info, item.getBrief_user_info());
+
+    }
+
+    public interface Callback{
+        public void click(View view);
     }
 }
