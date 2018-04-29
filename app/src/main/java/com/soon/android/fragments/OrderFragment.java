@@ -17,8 +17,6 @@ import com.soon.android.MyApplication;
 import com.soon.android.R;
 import com.soon.android.adapters.OrderListAdapter;
 import com.soon.android.bmobBean.Order;
-import com.soon.android.bmobBean.Store;
-import com.soon.android.utils.LoginUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +24,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.QueryListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,7 +66,8 @@ public class OrderFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order, container, false);
         ButterKnife.bind(this, view);
-        userId = LoginUtils.login().get("userid");
+        BmobUser currentUser = BmobUser.getCurrentUser();
+        userId = currentUser.getObjectId();
         queryOrdersByUserId(userId);
         return view;
     }

@@ -2,11 +2,10 @@ package com.soon.android;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,15 +19,14 @@ import com.soon.android.adapters.StoreActivityFragmentPagerAdaper;
 import com.soon.android.bmobBean.Store;
 import com.soon.android.db.StoreShoppingCar;
 import com.soon.android.utils.DecimalUtil;
-import com.soon.android.utils.LoginUtils;
 
 import org.litepal.crud.DataSupport;
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bmob.v3.BmobUser;
 
 public class StoreActivity extends AppCompatActivity {
 
@@ -92,11 +90,13 @@ public class StoreActivity extends AppCompatActivity {
         closeAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (LoginUtils.login().get("userid").equals("")){
-                    LoginActivity.actionStart(StoreActivity.this);
-                }else{
+                BmobUser currentUser = BmobUser.getCurrentUser();
+                if(currentUser != null){
                     Store s = (Store)getIntent().getSerializableExtra("canteen_data");
                     SubmitOrderActivity.actionStart(StoreActivity.this, s);
+                }else{
+                    LoginActivity.actionStart(StoreActivity.this);
+
                 }
             }
         });

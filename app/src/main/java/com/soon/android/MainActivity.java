@@ -1,6 +1,11 @@
 package com.soon.android;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,7 +25,6 @@ import com.soon.android.adapters.DrawerItemAdapter;
 import com.soon.android.db.StoreShoppingCar;
 import com.soon.android.fragments.OrderFragment;
 import com.soon.android.fragments.TakeOutHomeFragment;
-import com.soon.android.utils.LoginUtils;
 import com.yarolegovich.slidingrootnav.SlideGravity;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
@@ -29,11 +33,12 @@ import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.list)
     RecyclerView recyclerView;//侧滑抽屉中的选项
+
+    @BindView(R.id.user_icon)
+    CircleImageView userIcon;
 
     @BindView(R.id.user_name)
     TextView userName;
@@ -98,15 +106,21 @@ public class MainActivity extends AppCompatActivity {
         drawerItemList.add(new DrawerItemModel(R.drawable.ic_discounts, "我的优惠"));
         drawerItemList.add(new DrawerItemModel(R.drawable.ic_service, "服务中心"));
         drawerItemList.add(new DrawerItemModel(R.drawable.ic_setting, "账号设置"));
-        drawerItemList.add(new DrawerItemModel(R.drawable.ic_cooperation, "加盟合作"));
+        drawerItemList.add(new DrawerItemModel(R.drawable.ic_cooperation, "退出登录"));
 
         //recyclerView = (RecyclerView) findViewById(R.id.list);
         DrawerItemAdapter adapter = new DrawerItemAdapter(R.layout.left_drawer_item_option, drawerItemList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if(0 == position){
-                    AddressListActivity.actionStart(MainActivity.this);
+                switch (position){
+                    case 0:
+                        AddressListActivity.actionStart(MainActivity.this);
+                        break;
+                    case 5:
+                        BmobUser.logOut();
+                        LoginActivity.actionStart(MainActivity.this);
+                        break;
                 }
             }
         });
@@ -137,12 +151,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Map<String, String> userData = LoginUtils.login();
-        if(userData.get("userid") != ""){
-            userName.setText(userData.get("userid"));
-            userPhone.setText(userData.get("username"));
-
-//            DataSupport.deleteAll(AddressList.class);
+        BmobUser currentUser = BmobUser.getCurrentUser();
+        if(currentUser != null){
+            SharedPreferences preferences = getSharedPreferences("userdata", Context.MODE_PRIVATE);
+            String nickname = preferences.getString("nickname","");
+            String filename = preferences.getString("icon","");
+            if(!filename.equals("")){
+                String imageUrl = Environment.getExternalStorageDirectory() + "/" + filename;
+                Bitmap bitmap = BitmapFactory.decodeFile(imageUrl);
+                userIcon.setImageBitmap(bitmap);
+            }
+            userName.setText(nickname.equals("") ? currentUser.getObjectId() : nickname);
+            userPhone.setText(currentUser.getUsername());
+            openLoginActivity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PersonalCenterActivity.actionStart(MainActivity.this);
+                }
+            });
         }else{
             // 点击登录
             openLoginActivity.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     LoginActivity.actionStart(MainActivity.this);
                 }
             });
+
         }
     }
 

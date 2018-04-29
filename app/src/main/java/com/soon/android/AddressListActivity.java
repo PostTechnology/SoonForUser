@@ -21,7 +21,6 @@ import com.soon.android.adapterDataModels.AddressListChangeModel;
 import com.soon.android.adapters.AddressListChangeAdapter;
 import com.soon.android.bmobBean.Address;
 import com.soon.android.db.AddressList;
-import com.soon.android.utils.LoginUtils;
 
 import org.litepal.crud.DataSupport;
 
@@ -32,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
@@ -132,8 +132,8 @@ public class AddressListActivity extends AppCompatActivity {
         List<AddressList> addressLists = DataSupport.findAll(AddressList.class);
         if(addressLists.size() == 0){
             Bmob.initialize(this, "84aaecd322d3f4afa028222b754f2f98");
-
-            String userid = LoginUtils.login().get("userid");
+            BmobUser currentUser = BmobUser.getCurrentUser();
+            String userid = currentUser.getObjectId();
             Log.i("bmob","userid：" + userid);
             BmobQuery<Address> query = new BmobQuery<Address>();
             query.addWhereEqualTo("userObjectId",userid);

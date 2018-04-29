@@ -2,11 +2,11 @@ package com.soon.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.soon.android.adapters.SubmitOrderFoodListAdapter;
 import com.soon.android.bmobBean.Address;
@@ -24,7 +23,6 @@ import com.soon.android.bmobBean.Store;
 import com.soon.android.db.StoreShoppingCar;
 import com.soon.android.utils.DecimalUtil;
 import com.soon.android.utils.JsonUtil;
-import com.soon.android.utils.LoginUtils;
 
 import org.litepal.crud.DataSupport;
 
@@ -34,6 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -98,7 +97,8 @@ public class SubmitOrderActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //加载用户地址信息
-        queryByUserObjectId(LoginUtils.login().get("userid"));
+        final BmobUser currentUser = BmobUser.getCurrentUser();
+        queryByUserObjectId(currentUser.getObjectId());
 
         final Store store = (Store)getIntent().getSerializableExtra("canteen_data");
 
@@ -123,7 +123,7 @@ public class SubmitOrderActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Order order = new Order();
                 //注意：不能调用gameScore.setObjectId("")方法
-                order.setUserObjectId(LoginUtils.login().get("userid"));
+                order.setUserObjectId(currentUser.getObjectId());
                 order.setStoreObjectId(store.getObjectId());
                 order.setRemark(remark.getText().toString());
                 //设置商品json字符串

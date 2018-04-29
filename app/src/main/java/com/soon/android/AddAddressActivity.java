@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.soon.android.bmobBean.Address;
 import com.soon.android.db.AddressList;
-import com.soon.android.utils.LoginUtils;
 
 import org.litepal.crud.DataSupport;
 
@@ -26,6 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -165,7 +165,8 @@ public class AddAddressActivity extends AppCompatActivity {
                     Toast.makeText(AddAddressActivity.this, "请填写门牌号！", Toast.LENGTH_SHORT).show();
                 }else{
                     final Address address = new Address();
-                    address.setUserObjectId(LoginUtils.login().get("userid"));
+                    BmobUser currentUser = BmobUser.getCurrentUser();
+                    address.setUserObjectId(currentUser.getObjectId());
                     address.setName(name.getText().toString());
                     address.setTel(tel.getText().toString());
 //                    address.setLocation();
