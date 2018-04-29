@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -41,6 +42,8 @@ import cn.bmob.v3.listener.QueryListener;
  */
 public class CanteenFragment extends Fragment {
 
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
     private List<Store> canteenListData = new ArrayList<>();//存放食堂信息列表的数据
 
     private static final String TAG = "CanteenFragment";
@@ -50,13 +53,14 @@ public class CanteenFragment extends Fragment {
 
     public static final int STORE_LIST_DATA = 0;
 
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
 
-        public void  handleMessage(Message msg){
-            switch (msg.what){
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
                 case STORE_LIST_DATA:
                     canteenListData = (List<Store>) msg.obj;
                     loadCanteenListData();
+                    swipeRefreshLayout.setRefreshing(false);
                     break;
                 default:
                     break;
@@ -75,18 +79,18 @@ public class CanteenFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_canteen, container, false);
         ButterKnife.bind(this, view);
 
-//        String data = "[{\"imageRes\":\"http://p0.so.qhmsg.com/bdr/_240_/t01724ec7be21237d15.jpg\",\"canteenName\":\"麦庐一食堂\",\"ratingNum\":4.4,\"salesVolume\":100,\"dispatchTime\":50,\"sendOutPrice\":0,\"transportationExpense\":1,\"distance\":1.1},{\"imageRes\":\"http://p0.so.qhmsg.com/bdr/_240_/t01724ec7be21237d15.jpg\",\"canteenName\":\"麦庐一食堂\",\"ratingNum\":4.4,\"salesVolume\":100,\"dispatchTime\":50,\"sendOutPrice\":0,\"transportationExpense\":1,\"distance\":1.1},{\"imageRes\":\"http://p0.so.qhmsg.com/bdr/_240_/t01724ec7be21237d15.jpg\",\"canteenName\":\"麦庐一食堂\",\"ratingNum\":4.4,\"salesVolume\":100,\"dispatchTime\":50,\"sendOutPrice\":0,\"transportationExpense\":1,\"distance\":1.1},{\"imageRes\":\"http://p0.so.qhmsg.com/bdr/_240_/t01724ec7be21237d15.jpg\",\"canteenName\":\"麦庐一食堂\",\"ratingNum\":4.4,\"salesVolume\":100,\"dispatchTime\":50,\"sendOutPrice\":0,\"transportationExpense\":1,\"distance\":1.1},{\"imageRes\":\"http://p0.so.qhmsg.com/bdr/_240_/t01724ec7be21237d15.jpg\",\"canteenName\":\"麦庐一食堂\",\"ratingNum\":4.4,\"salesVolume\":100,\"dispatchTime\":50,\"sendOutPrice\":0,\"transportationExpense\":1,\"distance\":1.1},{\"imageRes\":\"http://p0.so.qhmsg.com/bdr/_240_/t01724ec7be21237d15.jpg\",\"canteenName\":\"麦庐一食堂\",\"ratingNum\":4.4,\"salesVolume\":100,\"dispatchTime\":50,\"sendOutPrice\":0,\"transportationExpense\":1,\"distance\":1.1},{\"imageRes\":\"http://p0.so.qhmsg.com/bdr/_240_/t01724ec7be21237d15.jpg\",\"canteenName\":\"麦庐一食堂\",\"ratingNum\":4.4,\"salesVolume\":100,\"dispatchTime\":50,\"sendOutPrice\":0,\"transportationExpense\":1,\"distance\":1.1},{\"imageRes\":\"http://p0.so.qhmsg.com/bdr/_240_/t01724ec7be21237d15.jpg\",\"canteenName\":\"麦庐一食堂\",\"ratingNum\":4.4,\"salesVolume\":100,\"dispatchTime\":50,\"sendOutPrice\":0,\"transportationExpense\":1,\"distance\":1.1},{\"imageRes\":\"http://p0.so.qhmsg.com/bdr/_240_/t01724ec7be21237d15.jpg\",\"canteenName\":\"麦庐一食堂\",\"ratingNum\":4.4,\"salesVolume\":100,\"dispatchTime\":50,\"sendOutPrice\":0,\"transportationExpense\":1,\"distance\":1.1}]";
-//        Gson gson = new Gson();
-//        canteenList = gson.fromJson(data, new TypeToken<List<CanteenListItemModel>>(){}.getType());
-//        StoreDaoImpl storeDao = new StoreDaoImpl();
-//        storeDao.queryStoreListByLocation(28.7362898584, 115.8207631296);
-//        canteenListData = storeDao.getStores();
-        //Toast.makeText(MyApplication.getContext(), canteenListData.size(), Toast.LENGTH_SHORT).show();
-        //Toast.makeText(MyApplication.getContext(), a, Toast.LENGTH_SHORT).show();
-//        for (Store store:canteenListData){
-//            Toast.makeText(MyApplication.getContext(), store.getName(), Toast.LENGTH_SHORT).show();
-//        }
-        queryStoreListByLocation(28.7362898584, 115.8207631296);
+        if (canteenListData.size() == 0 || canteenListData.isEmpty()){
+            queryStoreListByLocation(28.7362898584, 115.8207631296);
+        }else{
+            loadCanteenListData();
+        }
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryStoreListByLocation(28.7362898584, 115.8207631296);
+            }
+        });
         return view;
     }
 
@@ -100,20 +104,20 @@ public class CanteenFragment extends Fragment {
         query.findObjects(new FindListener<Store>() {
             @Override
             public void done(List<Store> object, BmobException e) {
-                if(e==null){
+                if (e == null) {
                     Message message = new Message();
                     message.what = STORE_LIST_DATA;
                     message.obj = object;
                     handler.sendMessage(message);
-                }else{
-                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                } else {
+                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
             }
         });
     }
 
     //显示从服务器查询到的食堂数据，并设置点击事件
-    private void loadCanteenListData(){
+    private void loadCanteenListData() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         canteensRecyclerView.setLayoutManager(layoutManager);
         CanteenListAdapter adapter = new CanteenListAdapter(R.layout.canteen_list_item, canteenListData);
@@ -148,15 +152,15 @@ public class CanteenFragment extends Fragment {
     }
 
     //查询指定id的店铺的评分
-    private void queryStoreRating(String storeObjectId){
+    private void queryStoreRating(String storeObjectId) {
         BmobQuery<Order> query = new BmobQuery<Order>();
         query.addWhereEqualTo("storeObjectId", storeObjectId);
-        query.average(new String[] { "rating" });
-        query.findStatistics(Order.class,new QueryListener<JSONArray>() {
+        query.average(new String[]{"rating"});
+        query.findStatistics(Order.class, new QueryListener<JSONArray>() {
             @Override
             public void done(JSONArray ary, BmobException e) {
-                if(e==null){
-                    if(ary!=null){
+                if (e == null) {
+                    if (ary != null) {
                         try {
                             JSONObject obj = ary.getJSONObject(0);
                             int average = obj.getInt("_averageRating");//_(关键字)+首字母大写的列名
@@ -164,13 +168,18 @@ public class CanteenFragment extends Fragment {
                         } catch (JSONException e1) {
                             e1.printStackTrace();
                         }
-                    }else{
+                    } else {
                         Toast.makeText(MyApplication.getContext(), "查询成功，无数据", Toast.LENGTH_SHORT).show();
                     }
-                }else{
-                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                } else {
+                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                 }
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 }

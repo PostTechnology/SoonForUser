@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.soon.android.adapters.SubmitOrderFoodListAdapter;
 import com.soon.android.bmobBean.Address;
+import com.soon.android.bmobBean.Goods;
 import com.soon.android.bmobBean.Order;
 import com.soon.android.bmobBean.Store;
 import com.soon.android.db.StoreShoppingCar;
@@ -36,6 +37,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class SubmitOrderActivity extends AppCompatActivity {
 
@@ -74,6 +76,7 @@ public class SubmitOrderActivity extends AppCompatActivity {
                     break;
                 case 1:
                     createOrderId = msg.obj.toString();
+                    finish();
                     PayActivity.actionStartForResult(SubmitOrderActivity.this, createOrderId, 1);
                     break;
                 default:
@@ -137,7 +140,6 @@ public class SubmitOrderActivity extends AppCompatActivity {
                     @Override
                     public void done(String objectId, BmobException e) {
                         if(e==null){
-                            DataSupport.deleteAll(StoreShoppingCar.class);
                             Message message = new Message();
                             message.what = 1;
                             message.obj = objectId;
@@ -147,6 +149,8 @@ public class SubmitOrderActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+
             }
         });
     }
