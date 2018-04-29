@@ -15,6 +15,9 @@ import com.soon.android.fragments.SupermarketFragment;
 public class TakeOutHomeFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private Fragment fragment;
+    private CanteenFragment canteenFragment = new CanteenFragment();
+    private SupermarketFragment supermarketFragment = new SupermarketFragment();
+    private OthersFragment othersFragment = new OthersFragment();
 
     public TakeOutHomeFragmentPagerAdapter(FragmentManager fm){
         super(fm);
@@ -29,9 +32,11 @@ public class TakeOutHomeFragmentPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 fragment =  new SupermarketFragment();
                 break;
+
             case 3:
                 fragment =  new OthersFragment();
                 break;
+
             default:
                 fragment =  new CanteenFragment();
                 break;

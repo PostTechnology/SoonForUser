@@ -114,16 +114,19 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
+        final TakeOutHomeFragment takeOutHomeFragment = new TakeOutHomeFragment();
+        final OrderFragment orderFragment = new OrderFragment();
+
         //设置选中事件，切换对应的碎片
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(int tabId) {
                 switch (tabId){
                     case R.id.tab_take_out:
-                        replaceFragment(new TakeOutHomeFragment());
+                        replaceFragment(takeOutHomeFragment);
                         break;
                     case R.id.tab_order:
-                        replaceFragment(new OrderFragment());
+                        replaceFragment(orderFragment);
                         break;
                     default:
                         break;
@@ -131,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         replaceFragment(new TakeOutHomeFragment());//初始化，默认展示外卖界面
+
         DataSupport.deleteAll(StoreShoppingCar.class);//初始化，删除购物车里所有的数据
     }
 
