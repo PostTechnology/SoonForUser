@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingLeft="15dp">
+    android:orientation="horizontal"
+    android:padding="15dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/brief_address"
@@ -33,4 +33,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp" />
     </LinearLayout>
+
+    <!--<Button-->
+        <!--android:id="@+id/edit_address"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="编辑" />-->
 </LinearLayout>
