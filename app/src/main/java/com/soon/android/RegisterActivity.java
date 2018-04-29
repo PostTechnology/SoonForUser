@@ -19,6 +19,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.soon.android.bmobBean.U_PersonalData;
 import com.soon.android.bmobBean.User;
 
 import java.util.Date;
@@ -26,6 +27,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.v3.BmobSMS;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -152,7 +154,7 @@ public class RegisterActivity extends AppCompatActivity {
                             String password = newPassword.getText().toString();
 
                             // 调用Bmob注册方法
-                            User user = new User();
+                            final User user = new User();
                             user.setUsername(account);
                             user.setMobilePhoneNumber(account);
                             user.setPassword(password);
@@ -162,7 +164,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void done(User o, BmobException e) {
                                     if(e == null){
-                                        Toast.makeText(RegisterActivity.this, "注册成功！",Toast.LENGTH_SHORT).show();
+                                        createPersonalData(user);
                                         finish();
                                     }else{
                                         Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
@@ -192,6 +194,25 @@ public class RegisterActivity extends AppCompatActivity {
                 }else{
                     registerButton.setEnabled(false);
                     registerButton.setBackgroundResource(R.drawable.unclickable);
+                }
+            }
+        });
+    }
+
+    private void createPersonalData(BmobUser user){
+        U_PersonalData personalData = new U_PersonalData();
+        personalData.setUserObjectId(user.getObjectId());
+        personalData.setIcon(null);
+        personalData.setJob("");
+        personalData.setSex(false);
+        personalData.save(new SaveListener<String>() {
+
+            @Override
+            public void done(String objectId, BmobException e) {
+                if(e==null){
+                    Toast.makeText(RegisterActivity.this, "注册成功！",Toast.LENGTH_SHORT).show();
+                }else{
+                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
                 }
             }
         });

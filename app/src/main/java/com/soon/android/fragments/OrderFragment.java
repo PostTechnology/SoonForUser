@@ -38,6 +38,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
@@ -89,7 +90,9 @@ public class OrderFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order, container, false);
         ButterKnife.bind(this, view);
-        userId = LoginUtils.login().get("userid");
+        BmobUser currentUser = BmobUser.getCurrentUser();
+        userId = currentUser.getObjectId();
+        queryOrdersByUserId(userId);
         if (orderListData.size() == 0 || orderListData.isEmpty()){
             queryOrdersByUserId(userId);
         }else {
@@ -104,7 +107,6 @@ public class OrderFragment extends Fragment {
                 queryOrdersByUserId(userId);
             }
         });
-
         return view;
     }
 

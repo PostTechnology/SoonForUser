@@ -5,11 +5,10 @@ import android.content.Context;
 import android.service.quicksettings.Tile;
 
 /**
- * Created by LYH on 2018/3/8.
+ * Created by LYH on 2018/4/26.
  */
 
 public class ProgressDialogUtil {
-    
     public static ProgressDialog getProgressDialog(Context context, String title, String message, boolean cancelable){
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setTitle(title);

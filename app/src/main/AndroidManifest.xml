@@ -50,6 +50,7 @@
         <activity android:name=".PayActivity" />
         <activity android:name=".UpdateAddressActivity" />
         <activity android:name=".PoiSelectActivity" />
+        <activity android:name=".PersonalCenterActivity"></activity>
         <activity android:name=".EvaluateActivity"></activity>
     </application>
 
