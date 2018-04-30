@@ -70,7 +70,7 @@ public class LBSUtils {
                 editor.putString("location","定位失败");
             }else{
                 editor.putString("city",location.getCity());
-                editor.putString("location",currentPosition.toString() + "(" + locationDescribe + ")");
+                editor.putString("location",currentPosition.toString());
                 editor.putFloat("Lng", (float) location.getLongitude());
                 editor.putFloat("Lat", (float) location.getLatitude());
             }

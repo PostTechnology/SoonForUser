@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -45,6 +46,9 @@ public class SubmitOrderActivity extends AppCompatActivity {
 
     @BindView(R.id.food_list)
     RecyclerView foodList;
+
+    @BindView(R.id.address_message)
+    CardView addressMessage;
 
     @BindView(R.id.delivery_cost)
     TextView deliveryCost;//配送费
@@ -98,7 +102,15 @@ public class SubmitOrderActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         ButterKnife.bind(this);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        init();
+    }
+
+    private void init(){
         //加载用户地址信息
         final BmobUser currentUser = BmobUser.getCurrentUser();
         queryByUserObjectId(currentUser.getObjectId());
@@ -120,6 +132,13 @@ public class SubmitOrderActivity extends AppCompatActivity {
             sum += s.getPrice() * s.getDiscount() * 0.1 * s.getSum();
         }
         sumPrice.setText("￥" + DecimalUtil.decimalForTwo(sum));
+
+        addressMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddressListActivity.actionStart(SubmitOrderActivity.this);
+            }
+        });
 
         sumOrder.setOnClickListener(new View.OnClickListener() {
             @Override
