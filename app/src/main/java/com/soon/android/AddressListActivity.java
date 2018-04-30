@@ -30,10 +30,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobBatch;
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BatchResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListListener;
 
 public class AddressListActivity extends AppCompatActivity {
 
@@ -48,22 +52,58 @@ public class AddressListActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0:
-                    List<Address> addressList = (ArrayList) msg.obj;
-                    for(Address address : addressList){
+                    final List<BmobObject> addressList = (ArrayList) msg.obj;
+                    for(BmobObject address :  addressList){
                         AddressList data = new AddressList();
-                        data.clone(address);
+                        data.clone((Address) address);
                         data.save();
-                        addressListChangeModelList.add(new AddressListChangeModel(address.getLocation(), address.getDoorNum(),
-                                address.getName() + "(" + (address.getGender() ? "先生" : "女士") + ") " + address.getTel()));
+                        addressListChangeModelList.add(new AddressListChangeModel(((Address)address).getLocation(),((Address)address).getDoorNum(),
+                                ((Address)address).getName() + "(" + (((Address)address).getGender() ? "先生" : "女士") + ") " + ((Address)address).getTel()));
                     }
 
                     AddressListChangeAdapter adapter = new AddressListChangeAdapter(R.layout.item_address, addressListChangeModelList);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(AddressListActivity.this);
+                    adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                            Toast.makeText(AddressListActivity.this, "position: "+ position, Toast.LENGTH_SHORT).show();
+                            UpdateAddressActivity.actionStart(AddressListActivity.this, position);
+                            return false;
+                        }
+                    });
                     adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                            Toast.makeText(AddressListActivity.this, "position: "+ position, Toast.LENGTH_SHORT).show();
-                            UpdateAddressActivity.actionStart(AddressListActivity.this, position);
+                            for(BmobObject address : addressList){
+                                ((Address)address).setDefaultAddress(false);
+                                AddressList data = new AddressList();
+                                data.clone((Address) address);
+                                data.save();
+                            }
+                            ((Address)addressList.get(position)).setDefaultAddress(false);
+                            AddressList data = new AddressList();
+                            data.clone((Address) addressList.get(position));
+                            data.save();
+                            new BmobBatch().updateBatch(addressList).doBatch(new QueryListListener<BatchResult>() {
+
+                                @Override
+                                public void done(List<BatchResult> o, BmobException e) {
+                                    if(e==null){
+                                        for(int i=0;i<o.size();i++){
+                                            BatchResult result = o.get(i);
+                                            BmobException ex =result.getError();
+                                            if(ex==null){
+                                                Log.i("changeAddress", "done: 第"+i+"个数据批量更新成功："+result.getUpdatedAt());
+                                            }else{
+                                                Log.i("changeAddress", "done: 第"+i+"个数据批量更新失败："+result.getUpdatedAt());
+                                            }
+                                        }
+                                    }else{
+                                        Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                                    }
+                                }
+                            });
+                            Toast.makeText(AddressListActivity.this, "修改默认地址成功",Toast.LENGTH_SHORT).show();
                         }
                     });
                     recyclerView.setLayoutManager(layoutManager);
@@ -129,11 +169,11 @@ public class AddressListActivity extends AppCompatActivity {
 
         addressListChangeModelList.clear();
 
-        List<AddressList> addressLists = DataSupport.findAll(AddressList.class);
+        final List<AddressList> addressLists = DataSupport.findAll(AddressList.class);
+        Bmob.initialize(this, "84aaecd322d3f4afa028222b754f2f98");
+        BmobUser currentUser = BmobUser.getCurrentUser();
+        final String userid = currentUser.getObjectId();
         if(addressLists.size() == 0){
-            Bmob.initialize(this, "84aaecd322d3f4afa028222b754f2f98");
-            BmobUser currentUser = BmobUser.getCurrentUser();
-            String userid = currentUser.getObjectId();
             Log.i("bmob","userid：" + userid);
             BmobQuery<Address> query = new BmobQuery<Address>();
             query.addWhereEqualTo("userObjectId",userid);
@@ -172,6 +212,53 @@ public class AddressListActivity extends AppCompatActivity {
                     Toast.makeText(AddressListActivity.this, "position: "+ position, Toast.LENGTH_SHORT).show();
                     UpdateAddressActivity.actionStart(AddressListActivity.this, position);
                     return false;
+                }
+            });
+            adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, final int position) {
+                    Log.i("bmob","userid：" + userid);
+                    BmobQuery<BmobObject> query = new BmobQuery<BmobObject>();
+                    query.addWhereEqualTo("userObjectId",userid);
+                    query.findObjects(new FindListener<BmobObject>() {
+                        @Override
+                        public void done(List<BmobObject> list, BmobException e) {
+                            if (e == null) {
+                                for(BmobObject address : list){
+                                    ((Address)address).setDefaultAddress(false);
+                                    AddressList data = new AddressList();
+                                    data.clone((Address) address);
+                                    data.save();
+                                }
+                                ((Address)list.get(position)).setDefaultAddress(false);
+                                AddressList data = new AddressList();
+                                data.clone((Address) list.get(position));
+                                data.save();
+                                new BmobBatch().updateBatch(list).doBatch(new QueryListListener<BatchResult>() {
+
+                                    @Override
+                                    public void done(List<BatchResult> o, BmobException e) {
+                                        if(e==null){
+                                            for(int i=0;i<o.size();i++){
+                                                BatchResult result = o.get(i);
+                                                BmobException ex =result.getError();
+                                                if(ex==null){
+                                                    Log.i("changeAddress", "done: 第"+i+"个数据批量更新成功："+result.getUpdatedAt());
+                                                }else{
+                                                    Log.i("changeAddress", "done: 第"+i+"个数据批量更新失败："+result.getUpdatedAt());
+                                                }
+                                            }
+                                        }else{
+                                            Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                                        }
+                                    }
+                                });
+                            }else{
+                                Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                            }
+                        }
+                    });
+                    Toast.makeText(AddressListActivity.this, "修改默认地址成功",Toast.LENGTH_SHORT).show();
                 }
             });
 //            adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
