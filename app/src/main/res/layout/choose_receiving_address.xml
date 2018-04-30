@@ -188,10 +188,10 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/address_list"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimary"/>
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
+
         </LinearLayout>
 
         <FrameLayout

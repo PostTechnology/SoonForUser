@@ -73,7 +73,6 @@ public class LBSUtils {
                 editor.putString("location",currentPosition.toString() + "(" + locationDescribe + ")");
                 editor.putFloat("Lng", (float) location.getLongitude());
                 editor.putFloat("Lat", (float) location.getLatitude());
-
             }
             editor.apply();
         }

@@ -110,20 +110,23 @@ public class MainActivity extends AppCompatActivity {
 
         //recyclerView = (RecyclerView) findViewById(R.id.list);
         DrawerItemAdapter adapter = new DrawerItemAdapter(R.layout.left_drawer_item_option, drawerItemList);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                switch (position){
-                    case 0:
-                        AddressListActivity.actionStart(MainActivity.this);
-                        break;
-                    case 5:
-                        BmobUser.logOut();
-                        LoginActivity.actionStart(MainActivity.this);
-                        break;
+        BmobUser currentUser = BmobUser.getCurrentUser();
+        if(currentUser != null){
+            adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    switch (position){
+                        case 0:
+                            AddressListActivity.actionStart(MainActivity.this);
+                            break;
+                        case 5:
+                            BmobUser.logOut();
+                            LoginActivity.actionStart(MainActivity.this);
+                            break;
+                    }
                 }
-            }
-        });
+            });
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

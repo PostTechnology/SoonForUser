@@ -159,13 +159,28 @@ public class AddressListActivity extends AppCompatActivity {
             }
             AddressListChangeAdapter adapter = new AddressListChangeAdapter(R.layout.item_address, addressListChangeModelList);
             LinearLayoutManager layoutManager = new LinearLayoutManager(AddressListActivity.this);
-            adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+//            adapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
+//                @Override
+//                public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+//                    UpdateAddressActivity.actionStart(AddressListActivity.this, position);
+//                    return false;
+//                }
+//            });
+            adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
                 @Override
-                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
                     Toast.makeText(AddressListActivity.this, "position: "+ position, Toast.LENGTH_SHORT).show();
                     UpdateAddressActivity.actionStart(AddressListActivity.this, position);
+                    return false;
                 }
             });
+//            adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                    Toast.makeText(AddressListActivity.this, "position: "+ position, Toast.LENGTH_SHORT).show();
+//                    UpdateAddressActivity.actionStart(AddressListActivity.this, position);
+//                }
+//            });
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
         }
