@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.soon.android.EvaluateActivity;
 import com.soon.android.MyApplication;
+import com.soon.android.OrderDetailsActivity;
 import com.soon.android.PayActivity;
 import com.soon.android.R;
 import com.soon.android.StoreActivity;
@@ -212,6 +213,13 @@ public class OrderFragment extends Fragment {
             }
         });
 
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Order order = orderListData.get(position);
+                OrderDetailsActivity.actionStart(getActivity(), order);
+            }
+        });
         orderList.setAdapter(adapter);
     }
 

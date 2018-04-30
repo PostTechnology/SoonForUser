@@ -149,8 +149,6 @@ public class SubmitOrderActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
             }
         });
     }
