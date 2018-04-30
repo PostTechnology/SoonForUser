@@ -1,6 +1,8 @@
 package com.soon.android.fragments;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -79,8 +81,14 @@ public class CanteenFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_canteen, container, false);
         ButterKnife.bind(this, view);
 
+        SharedPreferences pref = getActivity().getSharedPreferences("locatPosition", Context.MODE_PRIVATE);
+        final Float lng = pref.getFloat("Lng", -1);
+        final Float lat = pref.getFloat("Lat", -1);
+        Toast.makeText(getActivity(), lng + ":" + lat, Toast.LENGTH_SHORT).show();
+
         if (canteenListData.size() == 0 || canteenListData.isEmpty()){
-            queryStoreListByLocation(28.7362898584, 115.8207631296);
+            //queryStoreListByLocation(28.7362898584, 115.8207631296);
+            queryStoreListByLocation(lat, lng);
         }else{
             loadCanteenListData();
         }
@@ -88,7 +96,7 @@ public class CanteenFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                queryStoreListByLocation(28.7362898584, 115.8207631296);
+                queryStoreListByLocation(lat, lng);
             }
         });
         return view;
