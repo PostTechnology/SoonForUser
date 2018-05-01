@@ -19,11 +19,8 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gavin.com.library.StickyDecoration;
 import com.gavin.com.library.listener.GroupListener;
-import com.gavin.com.library.listener.OnGroupClickListener;
 import com.soon.android.MyApplication;
 import com.soon.android.R;
-import com.soon.android.adapterDataModels.FoodListItemModel;
-import com.soon.android.adapterDataModels.SortListItemModel;
 import com.soon.android.adapters.FoodListAdapter;
 import com.soon.android.adapters.SortListAdapter;
 import com.soon.android.bmobBean.Goods;
@@ -37,7 +34,6 @@ import butterknife.ButterKnife;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SQLQueryListener;
 
 /**
