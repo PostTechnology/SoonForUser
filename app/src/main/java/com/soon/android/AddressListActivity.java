@@ -52,13 +52,13 @@ public class AddressListActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0:
-                    final List<BmobObject> addressList = (ArrayList) msg.obj;
-                    for(BmobObject address :  addressList){
+                    final List<Address> addressList = (List<Address>) msg.obj;
+                    for(Address address :  addressList){
                         AddressList data = new AddressList();
-                        data.clone((Address) address);
+                        data.clone(address);
                         data.save();
-                        addressListChangeModelList.add(new AddressListChangeModel(((Address)address).getLocation(),((Address)address).getDoorNum(),
-                                ((Address)address).getName() + "(" + (((Address)address).getGender() ? "先生" : "女士") + ") " + ((Address)address).getTel()));
+                        addressListChangeModelList.add(new AddressListChangeModel(address.getLocation(),address.getDoorNum(),
+                                address.getName() + "(" + (address.getGender() ? "先生" : "女士") + ") " + address.getTel()));
                     }
 
                     AddressListChangeAdapter adapter = new AddressListChangeAdapter(R.layout.item_address, addressListChangeModelList);
@@ -74,18 +74,19 @@ public class AddressListActivity extends AppCompatActivity {
                     adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                            for(BmobObject address : addressList){
-                                ((Address)address).setDefaultAddress(false);
+                            List<BmobObject> objectList = new ArrayList<BmobObject>();
+                            for(int i = 0; i < addressList.size(); i++){
+                                Address address = addressList.get(i);
+                                address.setDefaultAddress(false);
+                                if(position == i){
+                                    address.setDefaultAddress(true);
+                                }
                                 AddressList data = new AddressList();
-                                data.clone((Address) address);
-                                data.save();
+                                data.clone(address);
+                                data.update(i);
+                                objectList.add(address);
                             }
-                            ((Address)addressList.get(position)).setDefaultAddress(false);
-                            AddressList data = new AddressList();
-                            data.clone((Address) addressList.get(position));
-                            data.save();
-                            new BmobBatch().updateBatch(addressList).doBatch(new QueryListListener<BatchResult>() {
-
+                            new BmobBatch().updateBatch(objectList).doBatch(new QueryListListener<BatchResult>() {
                                 @Override
                                 public void done(List<BatchResult> o, BmobException e) {
                                     if(e==null){
@@ -218,23 +219,25 @@ public class AddressListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, final int position) {
                     Log.i("bmob","userid：" + userid);
-                    BmobQuery<BmobObject> query = new BmobQuery<BmobObject>();
+                    BmobQuery<Address> query = new BmobQuery<Address>();
                     query.addWhereEqualTo("userObjectId",userid);
-                    query.findObjects(new FindListener<BmobObject>() {
+                    query.findObjects(new FindListener<Address>() {
                         @Override
-                        public void done(List<BmobObject> list, BmobException e) {
+                        public void done(List<Address> list, BmobException e) {
                             if (e == null) {
-                                for(BmobObject address : list){
-                                    ((Address)address).setDefaultAddress(false);
+                                List<BmobObject> objectList = new ArrayList<BmobObject>();
+                                for(int i = 0; i < list.size(); i++){
+                                    Address address = list.get(i);
+                                    address.setDefaultAddress(false);
+                                    if(position == i){
+                                        address.setDefaultAddress(true);
+                                    }
                                     AddressList data = new AddressList();
-                                    data.clone((Address) address);
-                                    data.save();
+                                    data.clone(address);
+                                    data.update(i);
+                                    objectList.add(address);
                                 }
-                                ((Address)list.get(position)).setDefaultAddress(false);
-                                AddressList data = new AddressList();
-                                data.clone((Address) list.get(position));
-                                data.save();
-                                new BmobBatch().updateBatch(list).doBatch(new QueryListListener<BatchResult>() {
+                                new BmobBatch().updateBatch(objectList).doBatch(new QueryListListener<BatchResult>() {
 
                                     @Override
                                     public void done(List<BatchResult> o, BmobException e) {
