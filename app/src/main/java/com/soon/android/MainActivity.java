@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -23,6 +24,7 @@ import com.roughike.bottombar.OnTabSelectListener;
 import com.soon.android.adapterDataModels.DrawerItemModel;
 import com.soon.android.adapters.DrawerItemAdapter;
 import com.soon.android.db.StoreShoppingCar;
+import com.soon.android.fragments.DiscoverFragment;
 import com.soon.android.fragments.OrderFragment;
 import com.soon.android.fragments.TakeOutHomeFragment;
 import com.yarolegovich.slidingrootnav.SlideGravity;
@@ -133,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
         final TakeOutHomeFragment takeOutHomeFragment = new TakeOutHomeFragment();
         final OrderFragment orderFragment = new OrderFragment();
+        final DiscoverFragment discoverFragment = new DiscoverFragment();
 
         //设置选中事件，切换对应的碎片
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -141,6 +144,9 @@ public class MainActivity extends AppCompatActivity {
                 switch (tabId){
                     case R.id.tab_take_out:
                         replaceFragment(takeOutHomeFragment);
+                        break;
+                    case R.id.tab_discover:
+                        replaceFragment(discoverFragment);
                         break;
                     case R.id.tab_order:
                         replaceFragment(orderFragment);
