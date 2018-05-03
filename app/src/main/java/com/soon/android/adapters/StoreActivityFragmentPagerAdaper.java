@@ -4,11 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.soon.android.fragments.CanteenFragment;
-import com.soon.android.fragments.CommentViewPagerFragment;
+import com.soon.android.fragments.CommentFragment;
 import com.soon.android.fragments.FoodViewPagerFragment;
-import com.soon.android.fragments.OthersFragment;
-import com.soon.android.fragments.SupermarketFragment;
 
 /**
  * Created by LYH on 2018/1/30.
@@ -25,11 +22,11 @@ public class StoreActivityFragmentPagerAdaper extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position){
-            case 1:
+            case 0:
                 fragment =  new FoodViewPagerFragment();
                 break;
-            case 2:
-                fragment =  new CommentViewPagerFragment();
+            case 1:
+                fragment =  new CommentFragment();
                 break;
             default:
                 fragment =  new FoodViewPagerFragment();

@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.soon.android.R;
+import com.soon.android.adapterDataModels.Discover;
 import com.soon.android.adapterDataModels.Image;
 import com.squareup.picasso.Picasso;
 import com.w4lle.library.NineGridAdapter;
@@ -21,10 +23,10 @@ import java.util.List;
 
 public class DiscoverListAdapter extends BaseAdapter {
     private Context context;
-    private List<List<Image>> datalist;
+    private List<Discover> datalist;
     private NineGridAdapter adapter;
 
-    public DiscoverListAdapter(Context context, List<List<Image>> datalist) {
+    public DiscoverListAdapter(Context context, List<Discover> datalist) {
         this.context = context;
         this.datalist = datalist;
     }
@@ -35,7 +37,7 @@ public class DiscoverListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Discover getItem(int position) {
         return datalist.get(position);
     }
 
@@ -47,12 +49,15 @@ public class DiscoverListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        List<Image> itemList = datalist.get(position);
+        Discover discover = getItem(position);
+        List<Image> itemList = getItem(position).getImages();
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.discover_list_item, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.ivMore = (NineGridlayout) convertView.findViewById(R.id.iv_ngrid_layout);
-
+            viewHolder.username = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.usercomment = (TextView) convertView.findViewById(R.id.comment);
+            viewHolder.commenttime = (TextView) convertView.findViewById(R.id.time);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -61,6 +66,9 @@ public class DiscoverListAdapter extends BaseAdapter {
             viewHolder.ivMore.setVisibility(View.GONE);
         } else {
             viewHolder.ivMore.setVisibility(View.VISIBLE);
+            viewHolder.username.setText(discover.getUsername());
+            viewHolder.usercomment.setText(discover.getComment());
+            viewHolder.commenttime.setText(discover.getTime());
             handlerOneImage(viewHolder, itemList);
         }
 
@@ -82,6 +90,9 @@ public class DiscoverListAdapter extends BaseAdapter {
 
     class ViewHolder {
         public NineGridlayout ivMore;
+        public TextView username;
+        public TextView usercomment;
+        public TextView commenttime;
     }
 
     class Adapter extends NineGridAdapter {

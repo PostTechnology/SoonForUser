@@ -5,5 +5,6 @@
     <item
         android:id="@+id/add_new_address"
         android:title="新增地址"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        />
 </menu>

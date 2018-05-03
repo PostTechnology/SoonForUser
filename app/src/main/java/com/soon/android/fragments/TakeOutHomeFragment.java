@@ -104,6 +104,9 @@ public class TakeOutHomeFragment extends Fragment {
         if(ContextCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
+        if(ContextCompat.checkSelfPermission(MyApplication.getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED){
+            permissionList.add(Manifest.permission.READ_PHONE_STATE);
+        }
         if(!permissionList.isEmpty()){
             String[] permissions = permissionList.toArray(new String[permissionList.size()]);
             requestPermissions(permissions, 1);
