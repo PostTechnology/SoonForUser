@@ -7,7 +7,9 @@
         <item name="colorPrimaryDark">#F83F3C</item>
         <item name="colorAccent">@color/colorAccent</item>
         <!--<item name="android:textColorPrimary">@color/black</item>-->
-        <item name="android:textColorPrimary">@color/whiteText</item>
+        <!--<item name="android:textColorPrimary">@color/whiteText</item>-->
+        <item name="colorControlNormal">@color/whiteText</item>
+        <item name="actionMenuTextColor">@color/whiteText</item>
     </style>
 
     <style name="TransparentStatusBar" parent="AppTheme">

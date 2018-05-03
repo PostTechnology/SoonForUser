@@ -48,6 +48,9 @@ public class PoiSelectActivity extends AppCompatActivity implements
     private ArrayAdapter<String> sugAdapter = null;
     private List<String> suggest;
     private int loadIndex = 0;
+
+    private Double longitude = 0d;
+    private Double latitude = 0d;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -210,6 +213,8 @@ public class PoiSelectActivity extends AppCompatActivity implements
                     .show();
         } else {
             searchText.setText(poiDetailResult.getName());
+            longitude = poiDetailResult.getLocation().longitude;
+            latitude = poiDetailResult.getLocation().latitude;
             Toast.makeText(PoiSelectActivity.this, poiDetailResult.getName() + ": " + poiDetailResult.getAddress(), Toast.LENGTH_SHORT)
                     .show();
         }
@@ -253,6 +258,8 @@ public class PoiSelectActivity extends AppCompatActivity implements
     public void submitButtonProcess(View v){
         Intent intent = new Intent();
         intent.putExtra("data_return", searchText.getText().toString());
+        intent.putExtra("data_lng", longitude);
+        intent.putExtra("data_lat", latitude);
         setResult(RESULT_OK, intent);
         finish();
     }

@@ -80,6 +80,12 @@ public class CanteenFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_canteen, container, false);
         ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         SharedPreferences pref = getActivity().getSharedPreferences("locatPosition", Context.MODE_PRIVATE);
         final Float lng = pref.getFloat("Lng", -1);
@@ -99,7 +105,6 @@ public class CanteenFragment extends Fragment {
                 queryStoreListByLocation(lat, lng);
             }
         });
-        return view;
     }
 
     //从服务器获取食堂列表信息

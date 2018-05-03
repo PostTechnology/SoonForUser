@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"></android.support.v7.widget.Toolbar>
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -88,14 +89,16 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp" />
             </RelativeLayout>
+
             <Button
                 android:id="@+id/pay"
-                android:text="确认支付"
-                android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
-                android:textSize="20sp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
                 android:background="#F83F3C"
-                android:layout_height="wrap_content" />
+                android:text="确认支付"
+                android:textColor="#fff"
+                android:textSize="20sp" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

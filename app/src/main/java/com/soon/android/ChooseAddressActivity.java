@@ -2,6 +2,7 @@ package com.soon.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -44,10 +45,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobBatch;
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BatchResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListListener;
 
 public class ChooseAddressActivity extends AppCompatActivity implements CitySortAdapter.OnItemClickListener{
 
@@ -137,7 +142,7 @@ public class ChooseAddressActivity extends AppCompatActivity implements CitySort
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0:
-                    List<Address> addressList = (ArrayList) msg.obj;
+                    final List<Address> addressList = (ArrayList) msg.obj;
                     for(Address address : addressList){
                         AddressList data = new AddressList();
                         data.clone(address);
@@ -148,6 +153,57 @@ public class ChooseAddressActivity extends AppCompatActivity implements CitySort
 
                     AddressListChangeAdapter adapter = new AddressListChangeAdapter(R.layout.item_address, addressListChangeModelList);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(ChooseAddressActivity.this);
+
+                    adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                            Toast.makeText(ChooseAddressActivity.this, "position: "+ position, Toast.LENGTH_SHORT).show();
+                            UpdateAddressActivity.actionStart(ChooseAddressActivity.this, position);
+                            return false;
+                        }
+                    });
+                    adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                            SharedPreferences.Editor editor = getSharedPreferences("locatPosition", Context.MODE_PRIVATE).edit();
+                            editor.putFloat("Lng", addressList.get(position).getLongitude().floatValue());
+                            editor.putFloat("Lat", addressList.get(position).getLatitude().floatValue());
+                            editor.putString("location", addressList.get(position).getLocation());
+                            editor.apply();
+                            List<BmobObject> objectList = new ArrayList<BmobObject>();
+                            for(int i = 0; i < addressList.size(); i++){
+                                Address address = addressList.get(i);
+                                address.setDefaultAddress(false);
+                                if(position == i){
+                                    address.setDefaultAddress(true);
+                                }
+                                AddressList data = new AddressList();
+                                data.clone(address);
+                                data.updateAll("addressId = ?",i+"");
+                                objectList.add(address);
+                            }
+                            new BmobBatch().updateBatch(objectList).doBatch(new QueryListListener<BatchResult>() {
+                                @Override
+                                public void done(List<BatchResult> o, BmobException e) {
+                                    if(e==null){
+                                        for(int i=0;i<o.size();i++){
+                                            BatchResult result = o.get(i);
+                                            BmobException ex =result.getError();
+                                            if(ex==null){
+                                                Log.i("changeAddress", "done: 第"+i+"个数据批量更新成功："+result.getUpdatedAt());
+                                            }else{
+                                                Log.i("changeAddress", "done: 第"+i+"个数据批量更新失败："+result.getUpdatedAt());
+                                            }
+                                        }
+                                    }else{
+                                        Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                                    }
+                                }
+                            });
+//                            Toast.makeText(ChooseAddressActivity.this, "修改默认地址成功",Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    });
                     recyclerView.setLayoutManager(layoutManager);
                     recyclerView.setAdapter(adapter);
                     break;
@@ -250,13 +306,12 @@ public class ChooseAddressActivity extends AppCompatActivity implements CitySort
             }
         });
 
-        List<AddressList> addressLists = DataSupport.findAll(AddressList.class);
+        final List<AddressList> addressLists = DataSupport.findAll(AddressList.class);
+        BmobUser currentUser = BmobUser.getCurrentUser();
+        final String userid = currentUser.getObjectId();
         if(addressLists.size() == 0){
             Log.i("TAG", "findInBmob");
             Bmob.initialize(this, "84aaecd322d3f4afa028222b754f2f98");
-
-            BmobUser currentUser = BmobUser.getCurrentUser();
-            String userid = currentUser.getObjectId();
             Log.i("bmob","userid：" + userid);
             BmobQuery<Address> query = new BmobQuery<Address>();
             query.addWhereEqualTo("userObjectId",userid);
@@ -282,15 +337,72 @@ public class ChooseAddressActivity extends AppCompatActivity implements CitySort
                         addressList.getName() + "(" + (addressList.getGender() ? "先生" : "女士") + ") " +
                                 addressList.getTel()));
             }
-            Log.i("TAG", "addressListChangeModelList.size=" + addressListChangeModelList.size());
             AddressListChangeAdapter adapter = new AddressListChangeAdapter(R.layout.item_address, addressListChangeModelList);
-            Log.i("TAG", "adapter");
             LinearLayoutManager layoutManager = new LinearLayoutManager(ChooseAddressActivity.this);
-            Log.i("TAG", "layoutManager");
+            adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                    Toast.makeText(ChooseAddressActivity.this, "position: "+ position, Toast.LENGTH_SHORT).show();
+                    UpdateAddressActivity.actionStart(ChooseAddressActivity.this, position);
+                    return false;
+                }
+            });
+            adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, final int position) {
+                    SharedPreferences.Editor editor = getSharedPreferences("locatPosition", Context.MODE_PRIVATE).edit();
+                    editor.putFloat("Lng", addressLists.get(position).getLongitude().floatValue());
+                    editor.putFloat("Lat", addressLists.get(position).getLatitude().floatValue());
+                    editor.putString("location", addressLists.get(position).getLocation());
+                    editor.apply();
+                    BmobQuery<Address> query = new BmobQuery<Address>();
+                    query.addWhereEqualTo("userObjectId",userid);
+                    query.findObjects(new FindListener<Address>() {
+                        @Override
+                        public void done(List<Address> list, BmobException e) {
+                            if (e == null) {
+                                List<BmobObject> objectList = new ArrayList<BmobObject>();
+                                for(int i = 0; i < list.size(); i++){
+                                    Address address = list.get(i);
+                                    address.setDefaultAddress(false);
+                                    if(position == i){
+                                        address.setDefaultAddress(true);
+                                    }
+                                    AddressList data = new AddressList();
+                                    data.clone(address);
+                                    data.updateAll("addressId = ?",i+"");
+                                    objectList.add(address);
+                                }
+                                new BmobBatch().updateBatch(objectList).doBatch(new QueryListListener<BatchResult>() {
+
+                                    @Override
+                                    public void done(List<BatchResult> o, BmobException e) {
+                                        if(e==null){
+                                            for(int i=0;i<o.size();i++){
+                                                BatchResult result = o.get(i);
+                                                BmobException ex =result.getError();
+                                                if(ex==null){
+                                                    Log.i("changeAddress", "done: 第"+i+"个数据批量更新成功："+result.getUpdatedAt());
+                                                }else{
+                                                    Log.i("changeAddress", "done: 第"+i+"个数据批量更新失败："+result.getUpdatedAt());
+                                                }
+                                            }
+                                        }else{
+                                            Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                                        }
+                                    }
+                                });
+                            }else{
+                                Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                            }
+                        }
+                    });
+//                    Toast.makeText(ChooseAddressActivity.this, "修改默认地址成功",Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
             recyclerView.setLayoutManager(layoutManager);
-            Log.i("TAG", "setLayoutManager");
             recyclerView.setAdapter(adapter);
-            Log.i("TAG", "setAdapter");
         }
     }
 

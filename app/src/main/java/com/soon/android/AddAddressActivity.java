@@ -3,6 +3,7 @@ package com.soon.android;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -61,6 +62,9 @@ public class AddAddressActivity extends AppCompatActivity {
 
     private String selectAddress = null;
 
+    private Double longitude = 0d;
+    private Double latitude = 0d;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +97,8 @@ public class AddAddressActivity extends AppCompatActivity {
             case 1:
                 if(resultCode == RESULT_OK){
                     selectAddress = data.getStringExtra("data_return");
+                    longitude = data.getDoubleExtra("data_lng",0d);
+                    latitude = data.getDoubleExtra("data_lat",0d);
                     Log.d("TAG", "onActivityResult: " + selectAddress);
                     Toast.makeText(AddAddressActivity.this, selectAddress, Toast.LENGTH_SHORT).show();
                 }
@@ -169,8 +175,12 @@ public class AddAddressActivity extends AppCompatActivity {
                     address.setUserObjectId(currentUser.getObjectId());
                     address.setName(name.getText().toString());
                     address.setTel(tel.getText().toString());
-//                    address.setLocation();
-//                    address.setLatitude();
+                    address.setLongitude(longitude);
+                    address.setLatitude(latitude);
+                    SharedPreferences.Editor editor = getSharedPreferences("locatPosition", Context.MODE_PRIVATE).edit();
+                    editor.putFloat("Lng", longitude.floatValue());
+                    editor.putFloat("Lat", latitude.floatValue());
+                    editor.apply();
                     address.setLocation(location.getText().toString());
                     address.setGender(gender);
                     address.setDoorNum(doorNumber.getText().toString());

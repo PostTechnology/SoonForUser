@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -123,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case 5:
                             BmobUser.logOut();
+                            SharedPreferences.Editor editor1 = getSharedPreferences("localPosition", Context.MODE_PRIVATE).edit();
+                            editor1.clear();
+                            editor1.commit();
+                            SharedPreferences.Editor editor2 = getSharedPreferences("userdata", Context.MODE_PRIVATE).edit();
+                            editor2.clear();
+                            editor2.commit();
                             LoginActivity.actionStart(MainActivity.this);
                             break;
                     }

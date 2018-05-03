@@ -2,6 +2,7 @@ package com.soon.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -74,6 +75,11 @@ public class AddressListActivity extends AppCompatActivity {
                     adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                            SharedPreferences.Editor editor = getSharedPreferences("locatPosition", Context.MODE_PRIVATE).edit();
+                            editor.putFloat("Lng", addressList.get(position).getLongitude().floatValue());
+                            editor.putFloat("Lat", addressList.get(position).getLatitude().floatValue());
+                            editor.putString("location", addressList.get(position).getLocation());
+                            editor.apply();
                             List<BmobObject> objectList = new ArrayList<BmobObject>();
                             for(int i = 0; i < addressList.size(); i++){
                                 Address address = addressList.get(i);
@@ -83,7 +89,7 @@ public class AddressListActivity extends AppCompatActivity {
                                 }
                                 AddressList data = new AddressList();
                                 data.clone(address);
-                                data.update(i);
+                                data.updateAll("addressId = ?",i+"");
                                 objectList.add(address);
                             }
                             new BmobBatch().updateBatch(objectList).doBatch(new QueryListListener<BatchResult>() {
@@ -104,7 +110,8 @@ public class AddressListActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-                            Toast.makeText(AddressListActivity.this, "修改默认地址成功",Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(AddressListActivity.this, "修改默认地址成功",Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     });
                     recyclerView.setLayoutManager(layoutManager);
@@ -218,6 +225,11 @@ public class AddressListActivity extends AppCompatActivity {
             adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, final int position) {
+                    SharedPreferences.Editor editor = getSharedPreferences("locatPosition", Context.MODE_PRIVATE).edit();
+                    editor.putFloat("Lng", addressLists.get(position).getLongitude().floatValue());
+                    editor.putFloat("Lat", addressLists.get(position).getLatitude().floatValue());
+                    editor.putString("location", addressLists.get(position).getLocation());
+                    editor.apply();
                     Log.i("bmob","userid：" + userid);
                     BmobQuery<Address> query = new BmobQuery<Address>();
                     query.addWhereEqualTo("userObjectId",userid);
@@ -234,7 +246,7 @@ public class AddressListActivity extends AppCompatActivity {
                                     }
                                     AddressList data = new AddressList();
                                     data.clone(address);
-                                    data.update(i);
+                                    data.updateAll("addressId = ?",i+"");
                                     objectList.add(address);
                                 }
                                 new BmobBatch().updateBatch(objectList).doBatch(new QueryListListener<BatchResult>() {
@@ -261,7 +273,8 @@ public class AddressListActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    Toast.makeText(AddressListActivity.this, "修改默认地址成功",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(AddressListActivity.this, "修改默认地址成功",Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             });
 //            adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">秒速五厘米</string>
+    <string name="app_name">秒速五厘米(用户版)</string>
     <string name="tab_first">食堂</string>
     <string name="tab_second">超市</string>
     <string name="tab_third">其他</string>
